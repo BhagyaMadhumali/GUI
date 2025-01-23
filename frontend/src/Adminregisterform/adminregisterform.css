@@ -1,0 +1,153 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Poppins", "sans-serif";
+}
+
+.accountbackgroundpart {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+    .accountbackgroundpart .accountimage {
+        position: absolute;
+        z-index: -1;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+
+
+
+
+.wrapperaccount {
+    width: 420px;
+    background: #fff;
+    color: #fff;
+    border-radius: 10px;
+    padding: 30px 40px;
+}
+
+    .wrapperaccount h1 {
+        font-size: 36px;
+        text-align: center;
+        color: black;
+    }
+
+    .wrapperaccount span {
+        color: rgb(176, 16, 216);
+        font-size: 36px;
+    }
+
+    .wrapperaccount .input-box12 {
+        width: 100%;
+        height: 50px;
+        color: black;
+        margin: 30px 0;
+    }
+
+.input-box12 input {
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    border: none;
+    outline: none;
+    border: 2px solid black;
+    border-radius: 40px;
+    font-size: 16px;
+    color: rgb(9, 7, 7);
+    padding: 20px 45px 20px 20px;
+}
+
+    .input-box12 input::placeholder {
+        color: black;
+    }
+
+.wrapperaccount .remember-forgot12 {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14.5px;
+    margin: -15px 0 15px;
+}
+
+.remember-forgot12 label input {
+    margin-right: 3px;
+    border: black;
+    accent-color: black;
+}
+
+.remember-forgot12 label {
+    color: black;
+    text-decoration: none;
+}
+
+.remember-forgot12 a {
+    color: black;
+    text-decoration: none;
+}
+
+    .remember-forgot12 a:hover {
+        text-decoration: underline;
+    }
+
+.wrapperaccount .accountbtn {
+    width: 50%;
+    height: 45px;
+    background: rgb(182, 72, 209);
+    border: none;
+    outline: none;
+    border-radius: 40px;
+    box-shadow: 0 0 10px rgba(12, 3, 3, 0.1);
+    cursor: pointer;
+    font-size: 16px;
+    color: black;
+    font-weight: 600;
+    align-items: center;
+    justify-content: center;
+    margin-left: 80px;
+}
+
+.wrapperaccount .register-link12 {
+    font-size: 600;
+    text-align: center;
+    margin: 20px 0 15px;
+}
+
+.register-link12 p {
+    color: black;
+    text-decoration: none;
+    font-weight: 700;
+}
+
+    .register-link12 p a {
+        color: rgb(176, 16, 216);
+        text-decoration: none;
+        font-weight: 700;
+    }
+
+        .register-link12 p a:hover {
+            text-decoration: underline;
+        }
+
+
+.admin-doctor12 p {
+    color: black;
+    text-decoration: none;
+    font-weight: 700;
+}
+
+    .admin-doctor12 p a {
+        color: rgb(176, 16, 216);
+        text-decoration: none;
+        font-weight: 600;
+    }
+
+        .admin-doctor12 p a:hover {
+            text-decoration: underline;
+        }

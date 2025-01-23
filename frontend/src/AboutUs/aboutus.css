@@ -1,0 +1,139 @@
+:root {
+    --purple: rgba(184, 61, 245, 0.8);
+    --black: #0d0d0d;
+    --light-color: #777;
+    --box-shadow: 0.5rem 0.5rem 0 rgba(104, 18, 103, 0.2);
+    --text-shadow: 0.5rem 0.5rem 0 rgba(0, 0, 0, 0.2);
+    --border: 0.2rem solid var(--purple);
+  }
+  
+  * {
+    font-family: "Lato", serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    outline: none;
+    border: none;
+    text-transform: capitalize;
+    transition: all 0.2s ease-out;
+    text-decoration: none;
+  }
+  
+  .about {
+    display: flex;
+    align-items: center;
+    gap: 2rem; /* Increase the gap */
+    flex-wrap: wrap;
+    background-color: #f7f3f6ea;
+    margin-top: 2.5rem;
+    margin-bottom: 3rem;
+    position: relative;
+  }
+  
+  .about .image5 {
+    flex: 1 1 45rem;
+    margin-top: 6rem;
+    display: flex;
+    justify-content: center;
+  }
+  
+  .about .image5 .aboutimage {
+    width: 100%;
+    height: auto;
+  }
+  
+  .about .content {
+    flex: 1 1 45rem;
+    padding: 1rem;
+  }
+  
+  .about .content h3 {
+    font-size: 3.5rem;
+    color: var(--black);
+    line-height: 1.2;
+    text-shadow: var(--text-shadow);
+    margin-top: 6rem;
+  }
+  
+  .about .content p {
+    font-size: 1.5rem;
+    color: var(--light-color);
+    line-height: 1.4;
+    padding: 1rem 0;
+  }
+  
+  .headingabout{
+    text-align:center;
+    padding-bottom: 2rem;
+    text-shadow:var(--text-shadow);
+    text-transform:uppercase;
+    color:var(--black);
+    font-size: 5rem;
+    letter-spacing: .4rem;
+
+}
+
+.headingabout span{
+    text-align:center;
+    padding-bottom: 2rem;
+    text-shadow:var(--text-shadow);
+    text-transform:uppercase;
+    color:var(--purple);
+    font-size: 5rem;
+    letter-spacing: .4rem;
+    color:var(--purple);
+}
+
+  
+.services{
+    background-color: #f7f3f6ea;
+
+}
+.services .services-box-container{
+
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(27rem,1fr));
+    gap: 2rem;
+
+}
+
+.services .services-box-container .services-box{
+    background:#fff;
+    border-radius:.5rem;
+    box-shadow:var(--box-shadow);
+    border:var(--border);
+    padding:2.5rem;
+}
+
+.services .services-box-container .services-box h3{
+    font-size: 2.5rem;
+    color:var(--black);
+    padding-bottom: 1rem 0;
+}
+
+.services .services-box-container .services-box p{
+    font-size: 1.4rem;
+    color:var(--light-color);
+    line-height:2;
+   
+}
+
+.aboutbtn{
+
+    display: inline-block;
+    margin-top:1rem  ;
+    padding: .5rem;
+    padding-left: 1rem;
+    border:var(--border);
+    border-radius: .5rem;
+    box-shadow:var(--box-shadow);
+    color:var(--purple);
+    cursor:pointer;
+    font-size:1.7rem;
+}
+
+.aboutbtn:hover{
+
+    background:var(--purple);
+    color:#fff;
+}

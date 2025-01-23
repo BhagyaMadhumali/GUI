@@ -1,0 +1,162 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Poppins", sans-serif;
+  }
+  
+  .add-doctor {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 20px;
+    flex-wrap: wrap;
+    padding: 20px;
+    margin-top: 9rem;
+  }
+  
+  .add-doctor-container {
+    background-color: #fff;
+    padding: 20px;
+    width: 100%;
+    max-width: 600px;
+    margin: 20px auto;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    flex: 1 1 45rem;
+  }
+  
+  h1 {
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  
+  .input-box {
+    margin-bottom: 20px;
+  }
+  
+  .input-box label {
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 5px;
+    display: block;
+  }
+  
+  .input-box input,
+  .input-box select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+    outline: none;
+  }
+  
+  .image-upload {
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  .image-upload label {
+    margin-right: 10px;
+    font-size: 14px;
+    color: #555;
+    font-weight: bold;
+    gap:0.1rem;
+  }
+  
+  .image-upload input {
+    display: inline-block;
+  }
+  
+  .image-upload img {
+    max-width: 80px;
+    max-height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+  
+  .days-times {
+    margin-bottom: 20px;
+  }
+  
+  .days-times h2 {
+    font-size: 18px;
+    color: #333;
+    margin-bottom: 10px;
+  }
+  
+  .day-group {
+    margin-bottom: 15px;
+  }
+  
+  .day-group label {
+    font-size: 14px;
+    color: #555;
+    margin-right: 10px;
+  }
+  
+  .day-group select {
+    padding: 5px;
+    margin-left: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  .add-doctor-btn {
+    background-color: var(--purple);
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    width: 100%;
+    transition: background-color 0.3s ease;
+  }
+  
+  .add-doctor-btn:hover {
+    background-color: purple;
+  }
+  
+  .doctor-list {
+    background: #fff;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 800px;
+  }
+  
+  .doctor-list h1 {
+    margin-bottom: 20px;
+    text-align: center;
+    color: #333;
+  }
+  
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  thead {
+    background: #f7f7f7;
+  }
+  
+  th,
+  td {
+    padding: 10px;
+    text-align: left;
+    border: 1px solid #ccc;
+  }
+  
+  table img {
+    max-width: 50px;
+    max-height: 50px;
+    border-radius: 5px;
+  }
+  
