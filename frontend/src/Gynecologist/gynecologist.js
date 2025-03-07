@@ -1,213 +1,188 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./gynecologist.css";
 import Headercomponent from "../Headercomponent/headercomponent";
+import axios from "axios";
 
 export default function Gynecologist() {
-  const [popupVisible, setPopupVisible] = useState([false, false, false]);
-  const [selectedDays, setSelectedDays] = useState([null, null, null]);
-  const [selectedTimes, setSelectedTimes] = useState([null, null, null]);
-  const [confirmedAppointments, setConfirmedAppointments] = useState([false, false, false]);
-  const [errorFields, setErrorFields] = useState([null, null, null]); 
-  const doctors = [
-    {
-      name: "Dr. Robert Anderson",
-      specialization: "Gynecologist",
-      image: "./doctor14.jpg",
-      days: ["Monday", "Wednesday", "Saturday"],
-      timeSlots: ["9:00 AM", "9:30 AM", "10:00 AM", "10:30 AM", "11:00 AM", "11:30 AM"],
-    },
-    {
-      name: "Dr. Emma Johnson",
-      specialization: "Gynecologist",
-      image: "./doctor19.jpg",
-      days: ["Tuesday", "Thursday", "Sunday"],
-      timeSlots: ["12:00 PM", "12:30 PM", "1:00 PM", "1:30 PM", "2:00 PM"],
-    },
-    {
-      name: "Dr. Christopher Brown",
-      specialization: "Gynecologist",
-      image: "./doctor10.avif",
-      days: ["Wednesday", "Friday", "Saturday"],
-      timeSlots: ["3:00 PM", "3:30 PM", "4:00 PM", "4:30 PM"],
-    },
-  ];
+  const [formData, setFormData] = useState({
+    fullName: "",
+    age: "",
+    email: "",
+    doctorName: "",
+    doctorSpecialty: "",
+    selectDate: "",
+  });
 
-  const openPopup = (index) => {
-    const dayError = !selectedDays[index];
-    const timeError = !selectedTimes[index];
-    
-    if (dayError && timeError) {
-      setErrorFields(prevState => {
-        const newErrorFields = [...prevState];
-        newErrorFields[index] = "both";
-        return newErrorFields;
-      });
-    } else if (dayError) {
-      setErrorFields(prevState => {
-        const newErrorFields = [...prevState];
-        newErrorFields[index] = "day";
-        return newErrorFields;
-      });
-    } else if (timeError) {
-      setErrorFields(prevState => {
-        const newErrorFields = [...prevState];
-        newErrorFields[index] = "time";
-        return newErrorFields;
-      });
-    } else {
-      const newPopupVisible = [...popupVisible];
-      newPopupVisible[index] = true;
-      setPopupVisible(newPopupVisible);
+  const [doctors, setDoctors] = useState([]);
+  const [editingDoctorId, setEditingDoctorId] = useState(null);
 
-      const newConfirmedAppointments = [...confirmedAppointments];
-      newConfirmedAppointments[index] = true;
-      setConfirmedAppointments(newConfirmedAppointments);
+  const handleInputChange = (e) => {
+    const { id, value } = e.target;
+    setFormData({ ...formData, [id]: value });
+  };
 
-      const newErrorFields = [...errorFields];
-      newErrorFields[index] = null; 
-      setErrorFields(newErrorFields);
+  const handleAddDoctor = async (e) => {
+    e.preventDefault();
+
+    try {
+      const appointmentData = {
+        fullName: formData.fullName,
+        age: formData.age,
+        email: formData.email,
+        doctorName: formData.doctorName,
+        doctorSpecialty: formData.doctorSpecialty || "Gynecologist", 
+        selectDate: formData.selectDate,
+      };
+
+      console.log("Sending appointment data:", appointmentData);
+
+      const response = await axios.post("http://localhost:5000/api/addAppointment", appointmentData);
+
+      console.log("Appointment added successfully:", response.data);
+
+      setFormData({ fullName: "", age: "", email: "", doctorName: "", doctorSpecialty: "", selectDate: "" });
+    } catch (err) {
+      console.error("Error adding appointment:", err);
     }
   };
 
-  const closePopup = (index) => {
-    const newPopupVisible = [...popupVisible];
-    newPopupVisible[index] = false;
-    setPopupVisible(newPopupVisible);
-  };
-
-  const handleDayChange = (index, day) => {
-    const newSelectedDays = [...selectedDays];
-    newSelectedDays[index] = day;
-    setSelectedDays(newSelectedDays);
-
-    const newErrorFields = [...errorFields];
-    if (newErrorFields[index] === "day") {
-      newErrorFields[index] = null;
+  const fetchDoctors = async () => {
+    try {
+      const response = await axios.get("http://localhost:5000/doctors");
+      setDoctors(response.data);
+    } catch (err) {
+      console.error("Error fetching doctors:", err);
     }
-    setErrorFields(newErrorFields);
   };
 
-  const handleTimeChange = (index, time) => {
-    const newSelectedTimes = [...selectedTimes];
-    newSelectedTimes[index] = time;
-    setSelectedTimes(newSelectedTimes);
-
-    const newErrorFields = [...errorFields];
-    if (newErrorFields[index] === "time") {
-      newErrorFields[index] = null;
-    }
-    setErrorFields(newErrorFields);
+  const handleSelectDoctor = (doctor) => {
+    setFormData({
+      ...formData,
+      doctorName: doctor.doctor_name,
+      doctorSpecialty: doctor.specialty,
+    });
   };
 
-  const cancelAppointment = (index) => {
-    const newSelectedDays = [...selectedDays];
-    const newSelectedTimes = [...selectedTimes];
-    const newConfirmedAppointments = [...confirmedAppointments];
-
-    newSelectedDays[index] = null;
-    newSelectedTimes[index] = null;
-    newConfirmedAppointments[index] = false;
-
-    setSelectedDays(newSelectedDays);
-    setSelectedTimes(newSelectedTimes);
-    setConfirmedAppointments(newConfirmedAppointments);
-  };
+  useEffect(() => {
+    fetchDoctors();
+  }, []);
 
   return (
     <>
-      <Headercomponent />
-      <section className="doctor-section">
-        <div className="backgroundpart1">
-          <img src="/image.png" alt="Background" className="image" />
-          <div className="doctor-boxes">
-            {doctors.map((doctor, index) => (
-              <div className="container" key={index}>
-                <div className="card">
-                  <div className="front">
-                    <img src={doctor.image} alt={doctor.name} className="image2" />
-                    <div className="info">
-                      <h3>{doctor.name}</h3>
-                      <span>{doctor.specialization}</span>
-                    </div>
-                    <button
-                      className="btn2"
-                      onClick={() => openPopup(index)}
-                      disabled={confirmedAppointments[index]}
-                    >
-                      {confirmedAppointments[index]
-                        ? "Appointment Confirmed"
-                        : "Book Appointment"}
-                    </button>
-                  </div>
-                  <div className="back">
-                    {popupVisible[index] ? (
-                      <div className="popup open-popup">
-                        <img src="/checkmark.webp" alt="Checkmark" />
-                        <h2>Thank You!</h2>
-                        <p>Your appointment has been successfully confirmed. We will notify you if it's completed or canceled.</p>
-                        <button
-                          type="button"
-                          className="okbtn"
-                          onClick={() => closePopup(index)}
-                        >
-                          Ok
-                        </button>
-                      </div>
-                    ) : confirmedAppointments[index] ? (
-                      <>
-                        <p>Your appointment is confirmed for {selectedDays[index]} at {selectedTimes[index]}.</p>
-                        <button
-                          type="button"
-                          className="btn1"
-                          onClick={() => cancelAppointment(index)}
-                        >
-                          Cancel Appointment
-                        </button>
-                      </>
-                    ) : (
-                      <>
-                        <p>Available Days This Week:</p>
-                        <select
-                          className={errorFields[index] === "day" || errorFields[index] === "both" ? "error-field" : ""}
-                          value={selectedDays[index] || ""}
-                          onChange={(e) => handleDayChange(index, e.target.value)}
-                        >
-                          <option value="">Select a day</option>
-                          {doctor.days.map((day, idx) => (
-                            <option key={idx} value={day}>
-                              {day}
-                            </option>
-                          ))}
-                        </select>
-                        <p>Select Time Slot:</p>
-                        <select
-                          className={errorFields[index] === "time" || errorFields[index] === "both" ? "error-field" : ""}
-                          value={selectedTimes[index] || ""}
-                          onChange={(e) => handleTimeChange(index, e.target.value)}
-                        >
-                          <option value="">Select a time</option>
-                          {doctor.timeSlots.map((time, idx) => (
-                            <option key={idx} value={time}>
-                              {time}
-                            </option>
-                          ))}
-                        </select>
-                        <button
-                          type="button"
-                          className="btn1"
-                          onClick={() => openPopup(index)}
-                        >
-                          Confirm Appointment
-                        </button>
-                      </>
-                    )}
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
+      <Headercomponent/>
+      <div className="gynecologist">
+        <div className="gynecologist-container">
+          <h1>{editingDoctorId ? "Update Gynecologist" : "Add Appointment"}</h1>
+          <form onSubmit={handleAddDoctor}>
+            <div className="input-box">
+              <label htmlFor="fullName">Full Name</label>
+              <input
+                type="text"
+                id="fullName"
+                value={formData.fullName}
+                onChange={handleInputChange}
+                placeholder="Enter full name"
+                required
+              />
+            </div>
+            <div className="input-box">
+              <label htmlFor="age">Age</label>
+              <input
+                type="number"
+                id="age"
+                value={formData.age}
+                onChange={handleInputChange}
+                placeholder="Enter age"
+                required
+              />
+            </div>
+            <div className="input-box">
+              <label htmlFor="email">Email</label>
+              <input
+                type="email"
+                id="email"
+                value={formData.email}
+                onChange={handleInputChange}
+                placeholder="Enter email"
+                required
+              />
+            </div>
+            <div className="input-box">
+              <label htmlFor="doctorName">Doctor Name</label>
+              <input
+                type="text"
+                id="doctorName"
+                value={formData.doctorName}
+                onChange={handleInputChange}
+                placeholder="Enter doctor's name"
+                readOnly
+                required
+              />
+            </div>
+            <div className="input-box">
+              <label htmlFor="doctorSpecialty">Doctor Specialty</label>
+              <input
+                type="text"
+                id="doctorSpecialty"
+                value={formData.doctorSpecialty}
+                onChange={handleInputChange}
+                placeholder={editingDoctorId ? "" : "Gynecologist"} 
+                readOnly 
+              />
+            </div>
+            <div className="input-box">
+              <label htmlFor="selectDate">Appointment Date</label>
+              <input
+                type="date"
+                id="selectDate"
+                value={formData.selectDate}
+                onChange={handleInputChange}
+                required
+              />
+            </div>
+            <button type="submit" className="submit-btn">
+              {editingDoctorId ? "Update Gynecologist" : "Add Appointment"}
+            </button>
+          </form>
         </div>
-      </section>
+
+        <div className="doctor-list">
+          <h1>Doctors List</h1>
+          <table>
+            <thead>
+              <tr>
+                <th>Doctor Image</th>
+                <th>Doctor Name</th>
+                <th>Specialty</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {doctors.map((doctor) => (
+                <tr key={doctor.id}>
+                  <td>
+                    <img
+                      src={`data:image/jpeg;base64,${doctor.image}`} 
+                      alt="Doctor"
+                      className="doctor-img"
+                    />
+                  </td>
+                  <td>{doctor.doctor_name}</td>
+                  <td>{doctor.specialty || "Not Specified"}</td>
+                  <td>
+                    <button
+                      className="select-btn"
+                      onClick={() => handleSelectDoctor(doctor)}
+                    >
+                      Select
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
     </>
   );
 }

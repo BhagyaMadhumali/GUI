@@ -1,32 +1,26 @@
 import React, { useState, useEffect } from "react";
-import "./messages.css";
 import AdminComponent from "../AdminComponent/admincomponent";
+import "./messages.css";
 
 export default function Messages() {
-  const [messages, setMessages] = useState([
-    {
-      id: 1,
-      name: "John Doe",
-      email: "johndoe@example.com",
-      message: "Hello, I would like to book an appointment.",
-      status: "Unread",
-    },
-    {
-      id: 2,
-      name: "Jane Smith",
-      email: "janesmith@example.com",
-      message: "Can you provide information about your services?",
-      status: "Read",
-    },
-  ]);
+  const [messages, setMessages] = useState([]);
 
-  const handleMarkAsRead = (id) => {
-    setMessages((prevMessages) =>
-      prevMessages.map((msg) =>
-        msg.id === id ? { ...msg, status: "Read" } : msg
-      )
-    );
-  };
+  useEffect(() => {
+    const fetchMessages = async () => {
+      try {
+        const response = await fetch("http://localhost:5000/messages");
+        const data = await response.json();
+        
+        const sortedMessages = data.sort((a, b) => b.id - a.id);
+        
+        setMessages(sortedMessages);
+      } catch (error) {
+        console.error("Error fetching messages:", error);
+      }
+    };
+
+    fetchMessages();
+  }, []);
 
   return (
     <>
@@ -39,8 +33,6 @@ export default function Messages() {
               <th>Name</th>
               <th>Email</th>
               <th>Message</th>
-              <th>Status</th>
-              <th>Admin Action</th>
             </tr>
           </thead>
           <tbody>
@@ -51,18 +43,6 @@ export default function Messages() {
                   <a href={`mailto:${message.email}`}>{message.email}</a>
                 </td>
                 <td>{message.message}</td>
-                <td>{message.status}</td>
-                <td>
-                  {message.status === "Unread" && (
-                    <button
-                      className="mark-read-btn"
-                      onClick={() => handleMarkAsRead(message.id)}
-                    >
-                      Mark as Read
-                    </button>
-                  )}
-                  {message.status === "Read" && <span>Read</span>}
-                </td>
               </tr>
             ))}
           </tbody>

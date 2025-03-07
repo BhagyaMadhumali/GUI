@@ -48,7 +48,7 @@ export default function AdminRegisterform() {
             <button type="Submit" className="accountbtn">Submit</button>
 
             <div className="register-link12">
-                <p> Already have an account? <Link to="/adminlogin">Login here</Link></p>
+                <p> Already have an account? <Link to="/adminlogin">Login Here</Link></p>
             </div>
 
  

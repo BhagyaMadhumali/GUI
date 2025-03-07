@@ -1,19 +1,17 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./adddoctor.css";
 import AdminComponent from "../AdminComponent/admincomponent";
+import axios from "axios";
 
 export default function AddDoctor() {
-  const [doctors, setDoctors] = useState([]);
   const [formData, setFormData] = useState({
     name: "",
     specialty: "",
     image: null,
-    workingDays: [
-      { day: "", time: "" },
-      { day: "", time: "" },
-      { day: "", time: "" },
-    ],
   });
+
+  const [doctors, setDoctors] = useState([]);
+  const [editingDoctorId, setEditingDoctorId] = useState(null);
 
   const handleInputChange = (e) => {
     const { id, value } = e.target;
@@ -23,40 +21,102 @@ export default function AddDoctor() {
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
     if (file) {
-      setFormData({ ...formData, image: URL.createObjectURL(file) });
+      setFormData({ ...formData, image: file });
     }
   };
 
-  const handleDayTimeChange = (index, field, value) => {
-    const updatedWorkingDays = [...formData.workingDays];
-    updatedWorkingDays[index][field] = value;
-    setFormData({ ...formData, workingDays: updatedWorkingDays });
+  const handleAddDoctor = async (e) => {
+    e.preventDefault();
+
+    const doctorData = new FormData();
+    doctorData.append("doctor_name", formData.name);
+    doctorData.append("specialty", formData.specialty);
+
+    if (formData.image) {
+      doctorData.append("image", formData.image);
+    }
+
+    try {
+      if (editingDoctorId) {
+
+        await axios.put(`http://localhost:5000/api/updateDoctor/${editingDoctorId}`, doctorData, {
+          headers: { "Content-Type": "multipart/form-data" },
+        });
+        setEditingDoctorId(null);
+      } else {
+
+        await axios.post("http://localhost:5000/api/addDoctor", doctorData, {
+          headers: { "Content-Type": "multipart/form-data" },
+        });
+      }
+
+      setFormData({ name: "", specialty: "", image: null });
+      fetchDoctors(); 
+    } catch (err) {
+      console.error("Error adding/updating doctor:", err);
+    }
   };
 
-  const handleAddDoctor = (e) => {
-    e.preventDefault();
-    setDoctors([...doctors, { ...formData, id: Date.now() }]);
-    setFormData({
-      name: "",
-      specialty: "",
-      image: null,
-      workingDays: [
-        { day: "", time: "" },
-        { day: "", time: "" },
-        { day: "", time: "" },
-      ],
-    });
+  const fetchDoctors = async () => {
+    try {
+      const response = await axios.get("http://localhost:5000/doctors");
+      setDoctors(response.data);
+    } catch (err) {
+      console.error("Error fetching doctors:", err);
+    }
   };
+
+  const handleCancel = async (id) => {
+    try {
+      await axios.delete(`http://localhost:5000/api/deleteDoctor/${id}`);
+      fetchDoctors(); 
+    } catch (err) {
+      console.error("Error deleting doctor:", err);
+    }
+  };
+
+  const handleUpdate = (doctor) => {
+    setFormData({
+      name: doctor.doctor_name,
+      specialty: doctor.specialty,
+      image: null,
+    });
+    setEditingDoctorId(doctor.id); 
+  };
+
+  useEffect(() => {
+    fetchDoctors();
+  }, []);
 
   return (
     <>
       <AdminComponent />
       <div className="add-doctor">
         <div className="add-doctor-container">
-          <h1>Add Doctor</h1>
+          <h1>{editingDoctorId ? "Update Doctor" : "Add Doctor"}</h1>
           <form onSubmit={handleAddDoctor}>
             <div className="image-upload">
-              {formData.image && <img className="image2" src={formData.image} alt="Doctor" />}
+           
+              {formData.image && (
+                <div className="image-container">
+                  <img
+                    className="image2"
+                    src={URL.createObjectURL(formData.image)}
+                    alt="Doctor"
+                  />
+                </div>
+              )}
+
+              {!formData.image && editingDoctorId && doctors.length > 0 && (
+                <div className="image-container">
+                  <img
+                    className="image2"
+                    src={`data:image/jpeg;base64,${doctors.find(doctor => doctor.id === editingDoctorId)?.image}`}
+                    alt="Doctor"
+                  />
+                </div>
+              )}
+              
               <label htmlFor="image">Upload Doctor Image</label>
               <input type="file" accept="image/*" onChange={handleImageUpload} />
             </div>
@@ -88,71 +148,53 @@ export default function AddDoctor() {
                 <option value="Gastroenterologist">Gastroenterologist</option>
               </select>
             </div>
-            <div className="days-times">
-              <h2>Working Days & Times</h2>
-              {formData.workingDays.map((entry, index) => (
-                <div className="day-group" key={index}>
-                  <label>Day {index + 1}</label>
-                  <select
-                    value={entry.day}
-                    onChange={(e) => handleDayTimeChange(index, "day", e.target.value)}
-                    required
-                  >
-                    <option value="">Select Day</option>
-                    <option value="Monday">Monday</option>
-                    <option value="Tuesday">Tuesday</option>
-                    <option value="Wednesday">Wednesday</option>
-                    <option value="Thursday">Thursday</option>
-                    <option value="Friday">Friday</option>
-                    <option value="Saturday">Saturday</option>
-                    <option value="Sunday">Sunday</option>
-                  </select>
-                  <select
-                    value={entry.time}
-                    onChange={(e) => handleDayTimeChange(index, "time", e.target.value)}
-                    required
-                  >
-                    <option value="">Select Time</option>
-                    <option value="9AM-12PM">9AM-12PM</option>
-                    <option value="12PM-4PM">12PM-4PM</option>
-                    <option value="4PM-9PM">4PM-9PM</option>
-                  </select>
-                </div>
-              ))}
-            </div>
             <button type="submit" className="add-doctor-btn">
-              Add Doctor
+              {editingDoctorId ? "Update Doctor" : "Add Doctor"}
             </button>
           </form>
         </div>
 
         <div className="doctor-list">
-          <h1>Doctor List</h1>
+        <h1>Doctors List</h1>
+
           <table>
             <thead>
               <tr>
                 <th>Image</th>
                 <th>Name</th>
                 <th>Specialty</th>
-                <th>Schedule</th>
+                <th>Actions</th>
               </tr>
             </thead>
             <tbody>
               {doctors.map((doctor) => (
                 <tr key={doctor.id}>
                   <td>
-                    {doctor.image && <img className="image2" src={doctor.image} alt="Doctor" />}
+                    {doctor.image && (
+                      <div className="image-container">
+                        <img
+                          className="doctor-img"
+                          src={`data:image/jpeg;base64,${doctor.image}`}
+                          alt="Doctor"
+                        />
+                      </div>
+                    )}
                   </td>
-                  <td>{doctor.name}</td>
+                  <td>{doctor.doctor_name}</td>
                   <td>{doctor.specialty}</td>
                   <td>
-                    {doctor.workingDays
-                      .filter((entry) => entry.day && entry.time)
-                      .map((entry, i) => (
-                        <div key={i}>
-                          {entry.day}: {entry.time}
-                        </div>
-                      ))}
+                    <button
+                      className="update-btn"
+                      onClick={() => handleUpdate(doctor)}
+                    >
+                      Update
+                    </button>
+                    <button
+                      className="cancel-btn"
+                      onClick={() => handleCancel(doctor.id)}
+                    >
+                      Cancel
+                    </button>
                   </td>
                 </tr>
               ))}

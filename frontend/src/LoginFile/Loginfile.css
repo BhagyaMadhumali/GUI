@@ -72,7 +72,7 @@
     color: black;
 }
 
-.wrapperlogin .remember-forgot1{
+/* .wrapperlogin .remember-forgot1{
     display: flex;
     justify-content: space-between;
     font-size: 14.5px;
@@ -97,7 +97,7 @@
 .remember-forgot1 a:hover{
    
     text-decoration: underline;
-}
+} */
 
 .wrapperlogin .loginbtn{
     width: 50%;
@@ -121,7 +121,7 @@
 .wrapperlogin .register-link1{
     font-size: 600;
     text-align: center;
-    margin:20px 0 15px;
+    margin:20px 0 15px 10px;
 
 }
 
@@ -146,6 +146,8 @@
     color:black;
     text-decoration:none;
     font-weight:700;
+    margin:20px 0 15px 10px;
+
 }
 .admin-doctor1 p a{
        color:rgb(176, 16, 216);

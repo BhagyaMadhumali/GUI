@@ -11,7 +11,6 @@ export default function AdminComponent() {
     </a>
 
     <nav className="navbar">
-    <Link to="/adminheader">Dashboard</Link>
 
       <Link to="/adddoctor">Add Doctor</Link>
       <Link to="/appointment">Appointment</Link>
